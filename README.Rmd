@@ -1,59 +1,75 @@
 ---
 output: github_document
 ---
-<!-- badges: start -->
-[![R-CMD-check](https://github.com/raghavanvishnu/tinyvalid/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/raghavanvishnu/tinyvalid/actions/workflows/R-CMD-check.yaml)
-<!-- badges: end -->
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
-)
-```
 
 # tinyvalid
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/raghavanvishnu/tinyvalid/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/raghavanvishnu/tinyvalid/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of tinyvalid is to ...
+`tinyvalid` is a lightweight R package for **validating tabular data**.  
+It helps you confirm that your data frames:
+
+- contain all required columns,  
+- have the expected classes (e.g. integer, numeric, Date),  
+- and (optionally) don’t contain unexpected extras.  
+
+It returns a tidy tibble of issues, making it easy to catch problems early in your pipeline.
+
+---
 
 ## Installation
 
-You can install the development version of tinyvalid from [GitHub](https://github.com/) with:
+You can install the development version directly from GitHub:
 
-``` r
+```r
 # install.packages("pak")
 pak::pak("raghavanvishnu/tinyvalid")
+
+
+Example
+
+Suppose we expect a dataset with three columns:
+
+id (integer)
+
+amount (numeric)
+
+date (Date)
+
+```
+Our data frame below is missing the date column:
+
+```r
+library(tinyvalid)
+library(tibble)
+
+df  <- tibble(id = as.integer(1:3), amount = as.numeric(1:3))
+req <- c(id = "integer", amount = "numeric", date = "Date")
+
+validate_schema(df, req)
+
+Expected output
+# A tibble: 1 × 5
+  check   column expected actual status
+  <chr>   <chr>  <chr>    <chr>  <chr>
+1 missing date   Date     <NA>   fail
 ```
 
-## Example
+The result shows that the column date is missing, so the check fails.
 
-This is a basic example which shows you how to solve a common problem:
 
-```{r example}
-devtools::load_all(".")
+Roadmap
 
-## basic example code
+Planned helper functions include:
+
+```r
+validate_ranges() – check numeric ranges & allowed categorical sets
+
+validate() – orchestrator that runs multiple checks and binds results
+
 ```
+License
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+MIT © Raghavan VMVS

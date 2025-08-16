@@ -1,60 +1,74 @@
 
+# tinyvalid
+
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/raghavanvishnu/tinyvalid/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/raghavanvishnu/tinyvalid/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+`tinyvalid` is a lightweight R package for **validating tabular
+data**.  
+It helps you confirm that your data frames:
 
-# tinyvalid
+- contain all required columns,  
+- have the expected classes (e.g. integer, numeric, Date),  
+- and (optionally) don’t contain unexpected extras.
 
-<!-- badges: start -->
-<!-- badges: end -->
+It returns a tidy tibble of issues, making it easy to catch problems
+early in your pipeline.
 
-The goal of tinyvalid is to …
+------------------------------------------------------------------------
 
 ## Installation
 
-You can install the development version of tinyvalid from
-[GitHub](https://github.com/) with:
+You can install the development version directly from GitHub:
 
 ``` r
 # install.packages("pak")
 pak::pak("raghavanvishnu/tinyvalid")
+
+
+Example
+
+Suppose we expect a dataset with three columns:
+
+id (integer)
+
+amount (numeric)
+
+date (Date)
 ```
 
-## Example
-
-This is a basic example which shows you how to solve a common problem:
+Our data frame below is missing the date column:
 
 ``` r
-devtools::load_all(".")
-#> ℹ Loading tinyvalid
-#> Warning: package 'testthat' was built under R version 4.4.3
+library(tinyvalid)
+library(tibble)
 
-## basic example code
+df  <- tibble(id = as.integer(1:3), amount = as.numeric(1:3))
+req <- c(id = "integer", amount = "numeric", date = "Date")
+
+validate_schema(df, req)
+
+Expected output
+# A tibble: 1 × 5
+  check   column expected actual status
+  <chr>   <chr>  <chr>    <chr>  <chr>
+1 missing date   Date     <NA>   fail
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+The result shows that the column date is missing, so the check fails.
+
+Roadmap
+
+Planned helper functions include:
 
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+validate_ranges() – check numeric ranges & allowed categorical sets
+
+validate() – orchestrator that runs multiple checks and binds results
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
+License
 
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+MIT © Raghavan VMVS
