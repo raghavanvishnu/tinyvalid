@@ -17,10 +17,8 @@ jobs:
             any::covr
             any::DT
             any::htmltools
-      - name: Run coverage
-        run: |
-          Rscript -e 'cov <- covr::package_coverage()'
-          Rscript -e 'covr::report(cov, file = "coverage.html")'
+      - name: Run coverage and save report
+        run: Rscript -e 'cov <- covr::package_coverage(); covr::report(cov, file = "coverage.html")'
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
