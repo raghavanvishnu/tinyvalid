@@ -11,3 +11,5 @@ RoxygenNote: 7.3.2
 Imports: 
     dplyr,
     tibble
+URL: https://github.com/raghavanvishnu/tinyvalid
+BugReports: https://github.com/raghavanvishnu/tinyvalid/issues
