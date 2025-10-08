@@ -71,4 +71,4 @@ validate() – orchestrator that runs multiple checks and binds results
 
 License
 
-MIT © Raghavan VMVS
+Raghavan VMVS
